@@ -30,4 +30,8 @@ class Place(BaseModel):
 
     @property
     def reviews(self):
-        return [review for review in storage.all(Review) if review.place_id == self.id]
+        return (
+            review
+            for review in storage.all(Review)
+            if review.place_id == self.id
+        )
