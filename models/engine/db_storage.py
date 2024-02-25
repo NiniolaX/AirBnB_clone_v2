@@ -19,6 +19,13 @@ class DBStorage:
     __engine = None
     __session = None
 
+    __classes = {
+                'BaseModel': BaseModel, 'User': User,
+                'Place': Place, 'State': State,
+                'City': City, 'Amenity': Amenity,
+                'Review': Review
+                }
+
     def __init__(self):
         """
         __init__ Class constructor
@@ -36,14 +43,8 @@ class DBStorage:
 
     def all(self, cls=None):
         """ Query current database section """
-        classes = {
-                'BaseModel': BaseModel, 'User': User,
-                'Place': Place, 'State': State,
-                'City': City, 'Amenity': Amenity,
-                'Review': Review
-                }
         if cls is not None:
-            if cls in classes.values():
+            if cls in self.__classes.values():
                 results = self.__session.query(cls).all()
         else:
             results = self.__session.query(State, City).all()
