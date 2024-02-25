@@ -1,9 +1,9 @@
 #!/usr/bin/python3
 """ Place Module for HBNB project """
 from models.base_model import BaseModel, Base
-from models import storage
 from models.review import Review
-from sqlalchemy import Column, String, Integer, FLOAT, ForeignKey, relationship
+from sqlalchemy import Column, String, Integer, FLOAT, ForeignKey
+from sqlalchemy.orm import relationship
 
 
 class Place(BaseModel):
@@ -30,6 +30,13 @@ class Place(BaseModel):
 
     @property
     def reviews(self):
+        """
+        reviews _summary_
+
+        Returns:
+            _type_: _description_
+        """
+        from models import storage
         return (
             review
             for review in storage.all(Review)
