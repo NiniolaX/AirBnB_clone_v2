@@ -3,19 +3,18 @@
 Module containing new engine DBStorage specification
 for using MySQL db for storage
 """
-from sqlalchemy import create_engine
 import os
-from models.base_model import BaseModel
-from models.user import User
-from models.place import Place
-from models.state import State
-from models.city import City
-from models.amenity import Amenity
-from models.review import Review
-
 
 class DBStorage:
     """ Class for configuring database storage engine """
+    from models.base_model import BaseModel
+    from models.user import User
+    from models.place import Place
+    from models.state import State
+    from models.city import City
+    from models.amenity import Amenity
+    from models.review import Review
+
     __engine = None
     __session = None
 
@@ -30,6 +29,7 @@ class DBStorage:
         """
         __init__ Class constructor
         """
+        from sqlalchemy import create_engine
         host = os.environ["HBNB_MYSQL_HOST"]
         user = os.environ["HBNB_MYSQL_USER"]
         passwd = os.environ["HBNB_MYSQL_PWD"]
@@ -75,6 +75,7 @@ class DBStorage:
 
     def reload(self):
         """ Creates all tables in the database and the current db session """
+        from models.base_model import Base
         from sqlalchemy.orm import sessionmaker, scoped_session
         Base.metadata.create_all(bind=self.__engine)
         session_factory = sessionmaker(bind=self.__engine, expire_on_commit=False)
