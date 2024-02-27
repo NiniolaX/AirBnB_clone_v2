@@ -3,7 +3,7 @@
 Module containing new engine DBStorage specification
 for using MySQL db for storage
 """
-import os
+
 
 class DBStorage:
     """ Class for configuring database storage engine """
@@ -29,15 +29,16 @@ class DBStorage:
         """
         __init__ Class constructor
         """
+        from os import getenv
         from sqlalchemy import create_engine
-        host = os.environ["HBNB_MYSQL_HOST"]
-        user = os.environ["HBNB_MYSQL_USER"]
-        passwd = os.environ["HBNB_MYSQL_PWD"]
-        db = os.environ["HBNB_MYSQL_DB"]
+        host = getenv("HBNB_MYSQL_HOST")
+        user = getenv("HBNB_MYSQL_USER")
+        passwd = getenv("HBNB_MYSQL_PWD")
+        db = getenv("HBNB_MYSQL_DB")
         self.__engine = create_engine("mysql+mysqldb://{}:{}@{}:3306/{}"
                                       .format(user, passwd, host, db),
                                       pool_pre_ping=True)
-        if os.environ.get('HBNB_ENV') == 'test':
+        if getenv('HBNB_ENV') == 'test':
             """drop all tables"""
             Base.metadata.dropall(bind=self.__engine)
 
@@ -49,9 +50,8 @@ class DBStorage:
         else:
             from sqlalchemy import union_all
             # Build the union query using union_all function
-            union_query = union_all(*[self.__session.query(table)
-                                    for table in self.__classes.values()]
-                                    )
+            results = union_all(*[self.__session.query(table)
+                                for table in self.__classes.values()])
             results = self.__session.execute(union_query)
 
         __objects = {}
@@ -78,5 +78,6 @@ class DBStorage:
         from models.base_model import Base
         from sqlalchemy.orm import sessionmaker, scoped_session
         Base.metadata.create_all(bind=self.__engine)
-        session_factory = sessionmaker(bind=self.__engine, expire_on_commit=False)
+        session_factory = sessionmaker(bind=self.__engine,
+                                       expire_on_commit=False)
         self.__session = scoped_session(session_factory)

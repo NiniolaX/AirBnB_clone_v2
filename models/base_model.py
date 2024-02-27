@@ -5,9 +5,12 @@ from datetime import datetime
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy import String, Column, DateTime
 from sqlalchemy.ext.declarative import declarative_base
+from os import getenv
 
-
-Base = declarative_base()
+if getenv('HBNB_TYPE_STORAGE') == 'db':
+    Base = declarative_base()
+else:
+    Base = object
 
 
 class BaseModel:
@@ -39,6 +42,7 @@ class BaseModel:
                 self.updated_at = datetime.now()
             for key, value in kwargs.items():
                 setattr(self, key, value)
+        self.save()
 
     def __str__(self):
         """Returns a string representation of the instance"""

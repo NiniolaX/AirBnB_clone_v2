@@ -1,9 +1,9 @@
 #!/usr/bin/python3
 """Allows instatiation of program storage, Database Storage or File Storage"""
-import os
+from os import getenv
 
 
-if os.environ.get('HBNB_TYPE_STORAGE') == 'db':
+if getenv('HBNB_TYPE_STORAGE') == 'db':
     from models.engine.db_storage import DBStorage
     storage = DBStorage()
     storage.reload()

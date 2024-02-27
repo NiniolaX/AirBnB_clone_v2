@@ -55,6 +55,7 @@ class test_fileStorage(unittest.TestCase):
     def test_base_model_instantiation(self):
         """ File is not created on BaseModel save """
         new = BaseModel()
+        self.assertIn(f"{new.__class__.__name__}.{new.id}", storage.all())
         self.assertFalse(os.path.exists('file.json'))
 
     def test_empty(self):
