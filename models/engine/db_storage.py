@@ -3,27 +3,30 @@
 Module containing new engine DBStorage specification
 for using MySQL db for storage
 """
+from models.base_model import BaseModel, Base
+from models.user import User
+from models.place import Place
+from models.state import State
+from models.city import City
+from models.amenity import Amenity
+from models.review import Review
+
+classes = {
+    'BaseModel': BaseModel,
+    'User': User,
+    'Place': Place,
+    'State': State,
+    'City': City,
+    'Amenity': Amenity,
+    'Review': Review
+}
 
 
 class DBStorage:
     """ Class for configuring database storage engine """
-    from models.base_model import BaseModel
-    from models.user import User
-    from models.place import Place
-    from models.state import State
-    from models.city import City
-    from models.amenity import Amenity
-    from models.review import Review
-
     __engine = None
     __session = None
 
-    __classes = {
-                'BaseModel': BaseModel, 'User': User,
-                'Place': Place, 'State': State,
-                'City': City, 'Amenity': Amenity,
-                'Review': Review
-                }
 
     def __init__(self):
         """
@@ -43,20 +46,40 @@ class DBStorage:
             Base.metadata.dropall(bind=self.__engine)
 
     def all(self, cls=None):
-        """ Query current database section """
+        """ Query current database section
+
+        Args:
+            cls(str): Name of class whose table is to be queried (optional)
+
+        Return:
+            __objects(dict): Format: <class-name.obj-id> = obj
+        """
+        __objects = {}
+
         if cls is not None:
-            if cls in self.__classes.values():
-                results = self.__session.query(cls).all()
+            if cls in classes.keys():
+                results = self.__session.query(classes[cls]).all()
+
         else:
             from sqlalchemy import union_all
-            # Build the union query using union_all function
-            results = union_all(*[self.__session.query(table)
-                                for table in self.__classes.values()])
+            union_query = union_all(*[self.__session.query(class_)
+                                    for class_ in classes.values()])
             results = self.__session.execute(union_query)
 
-        __objects = {}
         for obj in results:
             __objects[f"{obj.__class__.__name__}.{obj.id}"] = obj
+
+#        if cls is not None:
+#            if cls in classes:
+#                # Save all objects of class 'cls' in database to __objects
+#                for obj in self.__session.query(classes[cls]).all():
+#                    __objects[f"{obj.__class__.__name__}.{obj.id}"] = obj
+#        else:
+#            # Save all objects in database to __objects
+#            for class_ in classes.values():
+#                for obj in self.__session.query(class_).all():
+#                    __objects[f"{obj.__class__.__name__}.{obj.id}"] = obj
+
         return __objects
 
     def new(self, obj):
@@ -75,7 +98,6 @@ class DBStorage:
 
     def reload(self):
         """ Creates all tables in the database and the current db session """
-        from models.base_model import Base
         from sqlalchemy.orm import sessionmaker, scoped_session
         Base.metadata.create_all(bind=self.__engine)
         session_factory = sessionmaker(bind=self.__engine,

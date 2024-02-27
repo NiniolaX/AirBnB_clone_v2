@@ -1,9 +1,9 @@
 #!/usr/bin/python3
 """ City Module for HBNB project """
+from os import getenv
 from models.base_model import BaseModel, Base
 from sqlalchemy import String, Column, ForeignKey
 from sqlalchemy.orm import relationship
-from os import getenv
 
 
 class City(BaseModel, Base):
@@ -16,3 +16,7 @@ class City(BaseModel, Base):
     else:
         state_id = ""
         name = ""
+
+    def __init__(self, *args, **kwargs):
+        """Initializes the City model"""
+        super().__init__(*args, **kwargs)
