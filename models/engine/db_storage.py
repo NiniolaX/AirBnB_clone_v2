@@ -3,22 +3,13 @@
 Module containing new engine DBStorage specification
 for using MySQL db for storage
 """
-from models.base_model import BaseModel, Base
-from models.user import User
-from models.place import Place
+from models.base_model import Base
 from models.state import State
 from models.city import City
-from models.amenity import Amenity
-from models.review import Review
 
 classes = {
-    'BaseModel': BaseModel,
-    'User': User,
-    'Place': Place,
     'State': State,
     'City': City,
-    'Amenity': Amenity,
-    'Review': Review
 }
 
 
@@ -26,7 +17,6 @@ class DBStorage:
     """ Class for configuring database storage engine """
     __engine = None
     __session = None
-
 
     def __init__(self):
         """
@@ -54,29 +44,20 @@ class DBStorage:
         Return:
             __objects(dict): Format: <class-name.obj-id> = obj
         """
+        if not self.__session:
+            self.reload()
+
         objects = {}
 
-#        if cls is not None:
-#            if cls in classes.keys():
-#                results = self.__session.query(cls).all()
-#
-#        else:
-#            from sqlalchemy import union_all
-#            union_query = union_all(*[self.__session.query(class_)
-#                                    for class_ in classes.keys()])
-#            results = self.__session.execute(union_query)
-#
-#        for obj in results:
-#            __objects[f"{obj.__class__.__name__}.{obj.id}"] = obj
-
-        if cls is not None:
-            if cls in classes:
-                # Save all objects of class 'cls' in database to objects
-                for obj in self.__session.query(cls).all():
-                    objects[f"{obj.__class__.__name__}.{obj.id}"] = obj
+        if type(cls) == str:
+            cls = classes.get(cls, None)
+        if cls:
+            # Save all objects of class 'cls' in database to objects
+            for obj in self.__session.query(cls).all():
+                objects[f"{obj.__class__.__name__}.{obj.id}"] = obj
         else:
             # Save all objects in database to objects
-            for class_ in classes.keys():
+            for class_ in classes.values():
                 for obj in self.__session.query(class_).all():
                     objects[f"{obj.__class__.__name__}.{obj.id}"] = obj
 
@@ -99,7 +80,7 @@ class DBStorage:
     def reload(self):
         """ Creates all tables in the database and the current db session """
         from sqlalchemy.orm import sessionmaker, scoped_session
-        Base.metadata.create_all(bind=self.__engine)
-        session_factory = sessionmaker(bind=self.__engine,
+        session_factory = sessionmaker(self.__engine,
                                        expire_on_commit=False)
+        Base.metadata.create_all(self.__engine)
         self.__session = scoped_session(session_factory)

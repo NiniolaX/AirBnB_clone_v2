@@ -20,28 +20,22 @@ class BaseModel:
         updated_at = Column(DateTime, default=datetime.utcnow(), nullable=False)
 
     def __init__(self, *args, **kwargs):
-        """Instantiates a new model"""
-        if not kwargs:
+        """Instantiates a new model or recreates an existing model"""
+        if kwargs and 'id' in kwargs:
+            # Recreate an existing object from dict representation
+            kwargs['updated_at'] = datetime.strptime(kwargs['updated_at'],
+                                                     '%Y-%m-%dT%H:%M:%S.%f')
+            kwargs['created_at'] = datetime.strptime(kwargs['created_at'],
+                                                     '%Y-%m-%dT%H:%M:%S.%f')
+            del kwargs['__class__']
+        else:
+            # Create a new model
             self.id = str(uuid.uuid4())
             self.created_at = datetime.now()
             self.updated_at = datetime.now()
-        else:
-            # Object to be recreated
-            if 'updated_at' in kwargs.keys() and 'created_at' in kwargs.keys():
-                kwargs['updated_at'] = datetime\
-                    .strptime(kwargs['updated_at'],
-                              '%Y-%m-%dT%H:%M:%S.%f')
-                kwargs['created_at'] = datetime\
-                    .strptime(kwargs['created_at'],
-                              '%Y-%m-%dT%H:%M:%S.%f')
-                del kwargs['__class__']
-            # New instance to be created with parameters
-            else:
-                self.id = str(uuid.uuid4())
-                self.created_at = datetime.now()
-                self.updated_at = datetime.now()
-            for key, value in kwargs.items():
-                setattr(self, key, value)
+
+        for key, value in kwargs.items():
+            setattr(self, key, value)
 
     def __str__(self):
         """Returns a string representation of the instance"""
