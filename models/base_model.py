@@ -42,7 +42,6 @@ class BaseModel:
                 self.updated_at = datetime.now()
             for key, value in kwargs.items():
                 setattr(self, key, value)
-        self.save()
 
     def __str__(self):
         """Returns a string representation of the instance"""

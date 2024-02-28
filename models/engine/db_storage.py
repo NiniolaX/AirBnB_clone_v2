@@ -54,33 +54,33 @@ class DBStorage:
         Return:
             __objects(dict): Format: <class-name.obj-id> = obj
         """
-        __objects = {}
-
-        if cls is not None:
-            if cls in classes.keys():
-                results = self.__session.query(classes[cls]).all()
-
-        else:
-            from sqlalchemy import union_all
-            union_query = union_all(*[self.__session.query(class_)
-                                    for class_ in classes.values()])
-            results = self.__session.execute(union_query)
-
-        for obj in results:
-            __objects[f"{obj.__class__.__name__}.{obj.id}"] = obj
+        objects = {}
 
 #        if cls is not None:
-#            if cls in classes:
-#                # Save all objects of class 'cls' in database to __objects
-#                for obj in self.__session.query(classes[cls]).all():
-#                    __objects[f"{obj.__class__.__name__}.{obj.id}"] = obj
+#            if cls in classes.keys():
+#                results = self.__session.query(cls).all()
+#
 #        else:
-#            # Save all objects in database to __objects
-#            for class_ in classes.values():
-#                for obj in self.__session.query(class_).all():
-#                    __objects[f"{obj.__class__.__name__}.{obj.id}"] = obj
+#            from sqlalchemy import union_all
+#            union_query = union_all(*[self.__session.query(class_)
+#                                    for class_ in classes.keys()])
+#            results = self.__session.execute(union_query)
+#
+#        for obj in results:
+#            __objects[f"{obj.__class__.__name__}.{obj.id}"] = obj
 
-        return __objects
+        if cls is not None:
+            if cls in classes:
+                # Save all objects of class 'cls' in database to objects
+                for obj in self.__session.query(cls).all():
+                    objects[f"{obj.__class__.__name__}.{obj.id}"] = obj
+        else:
+            # Save all objects in database to objects
+            for class_ in classes.keys():
+                for obj in self.__session.query(class_).all():
+                    objects[f"{obj.__class__.__name__}.{obj.id}"] = obj
+
+        return objects
 
     def new(self, obj):
         """ Adds an object to the current database session """

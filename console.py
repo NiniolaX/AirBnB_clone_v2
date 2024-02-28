@@ -141,8 +141,9 @@ class HBNBCommand(cmd.Cmd):
 
         if not params:  # No parameters passed to create
             new_instance = HBNBCommand.classes[cls]()
-            storage.save()
-            print(new_instance.id)
+            if hasattr(new_instance, 'id'):
+                new_instance.save()
+                print(new_instance.id)
             return
 
         # If parameters were passed
@@ -155,8 +156,9 @@ class HBNBCommand(cmd.Cmd):
 
         # Create object with parameters
         new_instance = HBNBCommand.classes[cls](**kwargs)
-        storage.save()
-        print(new_instance.id)
+        if hasattr(new_instance, 'id'):
+            new_instance.save()
+            print(new_instance.id)
 
     def help_create(self):
         """ Help information for the create method """
