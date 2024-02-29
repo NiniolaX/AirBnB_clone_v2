@@ -27,8 +27,8 @@ class State(BaseModel, Base):
             """Getter method for cities in the State"""
             from models import storage
             from models.city import City
-            cities = []
+            city_instances = []
             for obj in storage.all(City).values():
-                if cities.state_id == self.id:
-                    cities.append(obj)
-            return cities
+                if obj.state_id == self.id:
+                    city_instances.append(obj)
+            return city_instances

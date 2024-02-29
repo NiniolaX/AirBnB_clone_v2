@@ -3,7 +3,7 @@
 Module containing new engine DBStorage specification
 for using MySQL db for storage
 """
-from models.base_model import Base
+from models.base_model import BaseModel, Base
 from models.state import State
 from models.city import City
 
@@ -44,8 +44,11 @@ class DBStorage:
         Return:
             __objects(dict): Format: <class-name.obj-id> = obj
         """
-        objects = {}
+        if not self.__session:
+            self.reload()
 
+        objects = {}
+        
         if cls:
             # Save all objects of class 'cls' in database to objects
             for obj in self.__session.query(cls).all():
@@ -69,7 +72,7 @@ class DBStorage:
     def delete(self, obj=None):
         """ Deletes object from the current database session """
         if obj is not None:
-            from sqlalchemy.orm import delete
+            from sqlalchemy import delete
             self.__session.delete(obj)
 
     def reload(self):

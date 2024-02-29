@@ -17,6 +17,8 @@ class TestCreateCommand(unittest.TestCase):
         if os.path.exists("file.json"):
             os.remove("file.json")
 
+    @unittest.skipIf(os.getenv('HBNB_TYPE_STORAGE') == 'db',
+                     "Test not relevant for database storage")
     def test_create_with_int_param(self):
         """Tests create command with integer parameter"""
         self.console.do_create("Place number_rooms=3 max_guest=4")
@@ -27,6 +29,8 @@ class TestCreateCommand(unittest.TestCase):
         self.assertEqual(obj.number_rooms, 3)
         self.assertEqual(obj.max_guest, 4)
 
+    @unittest.skipIf(os.getenv('HBNB_TYPE_STORAGE') == 'db',
+                     "Test not relevant for database storage")
     def test_create_with_float_param(self):
         """Test create command with float parameter"""
         self.console.do_create("Place lat=37.773972 long=122.431297")
@@ -35,6 +39,8 @@ class TestCreateCommand(unittest.TestCase):
         self.assertEqual(obj.lat, 37.773972)
         self.assertEqual(obj.long, 122.431297)
 
+    @unittest.skipIf(os.getenv('HBNB_TYPE_STORAGE') == 'db',
+                     "Test not relevant for database storage")
     def test_create_with_strings(self):
         """Test create command with string parameters"""
         self.console.do_create("Place name=\"Ile_Ayo\" city_id=\"0001\"")
@@ -43,6 +49,8 @@ class TestCreateCommand(unittest.TestCase):
         self.assertEqual(obj.name, "Ile Ayo")
         self.assertEqual(obj.city_id, "0001")
 
+    @unittest.skipIf(os.getenv('HBNB_TYPE_STORAGE') == 'db',
+                     "Test not relevant for database storage")
     def test_create_with_quoted_strings(self):
         """Test create command with quoted strings in a string parameter"""
         self.console.do_create("Place desc=\"A_place_to_\"Turaka\"!")

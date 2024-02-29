@@ -20,7 +20,7 @@ class test_dbStorage(unittest.TestCase):
                                      passwd=os.getenv('HBNB_MYSQL_PWD'),
                                      database=os.getenv('HBNB_MYSQL_DB')
                 )
-        self.cur = connection.cursor()
+        self.cur = self.db.cursor()
         self.console = HBNBCommand()
 
     def tearDown(self):
@@ -31,5 +31,18 @@ class test_dbStorage(unittest.TestCase):
             os.remove('file.json')
 
     def test_all_with_class(self):
-        curr_states_count = self.cur.execute("SELECT * FROM states;")
-        self.assertEqual(curr_states_count, storage.all(State))
+        """ Tests all method with class """
+        self.cur.execute("SELECT COUNT(*) FROM states;")
+        states_count = self.cur.fetchone()[0]
+        self.assertEqual(states_count, len(storage.all(State)))
+
+    def test_all_without_class(self):
+        """ Tests all method without class """
+        from models.city import City
+        tables = {'State': State, 'City': City}
+        query = "SELECT COUNT(*) FROM %s;"
+        obj_count = 0;
+        for table in tables.values():
+            result = self.cur.execute(query, (table,))
+            obj_count = obj_count + result.fetchone()[0]
+        self.assertEqual(obj_count, len(storage.all()))
