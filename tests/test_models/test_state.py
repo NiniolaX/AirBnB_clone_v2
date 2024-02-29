@@ -3,10 +3,15 @@
 from tests.test_models.test_base_model import test_basemodel
 from models.state import State
 import os
+import unittest
+from console import HBNBCommand
+from models import storage
 
 
+@unittest.skipIf(os.getenv('HBNB_TYPE_STORAGE') == 'db',
+                 "State instance will not be created without name")
 class test_state(test_basemodel):
-    """ Tests the State class """
+    """ Tests the State class with file storage engine """
 
     def __init__(self, *args, **kwargs):
         """
@@ -20,3 +25,11 @@ class test_state(test_basemodel):
         """ Test name attribute """
         new = self.value(name="California")
         self.assertEqual(type(new.name), str)
+
+@unittest.skipIf(os.getenv('HBNB_TYPE_STORAGE') != 'db',
+                         "State instance will not be created without name")
+class test_state_with_dbStorage(unittest.TestCase):
+    """ Tests State class with database storage engine """
+    def setUp(self):
+        """ Sets up resources for testing """
+        pass

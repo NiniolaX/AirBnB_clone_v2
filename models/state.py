@@ -19,8 +19,6 @@ class State(BaseModel, Base):
 
     def __init__(self, *args, **kwargs):
         """Initializes the State model"""
-        #if 'name' not in kwargs.keys():
-            #return
         super().__init__(*args, **kwargs)
 
     if getenv('HBNB_TYPE_STORAGE') != 'db':

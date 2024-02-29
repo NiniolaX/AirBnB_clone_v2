@@ -18,11 +18,4 @@ class City(BaseModel, Base):
 
     def __init__(self, *args, **kwargs):
         """Initializes the City model"""
-#        from models import storage
-#        from models.state import State
-#
-#        if 'name' not in kwargs or 'state_id' not in kwargs:
-#            return
-#        if f"State.{kwargs['state_id']}" not in storage.all(State).keys():
-#            return
         super().__init__(*args, **kwargs)

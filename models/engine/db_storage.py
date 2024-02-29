@@ -33,7 +33,7 @@ class DBStorage:
                                       pool_pre_ping=True)
         if getenv('HBNB_ENV') == 'test':
             """drop all tables"""
-            Base.metadata.dropall(bind=self.__engine)
+            Base.metadata.drop_all(bind=self.__engine)
 
     def all(self, cls=None):
         """ Query current database section
@@ -44,13 +44,8 @@ class DBStorage:
         Return:
             __objects(dict): Format: <class-name.obj-id> = obj
         """
-        if not self.__session:
-            self.reload()
-
         objects = {}
 
-        if type(cls) == str:
-            cls = classes.get(cls, None)
         if cls:
             # Save all objects of class 'cls' in database to objects
             for obj in self.__session.query(cls).all():
