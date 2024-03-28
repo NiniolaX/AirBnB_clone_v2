@@ -6,10 +6,12 @@ for using MySQL db for storage
 from models.base_model import BaseModel, Base
 from models.state import State
 from models.city import City
+from models.user import User
 
 classes = {
     'State': State,
     'City': City,
+    'User': User
 }
 
 
@@ -48,7 +50,7 @@ class DBStorage:
             self.reload()
 
         objects = {}
-        
+
         if cls:
             # Save all objects of class 'cls' in database to objects
             for obj in self.__session.query(cls).all():

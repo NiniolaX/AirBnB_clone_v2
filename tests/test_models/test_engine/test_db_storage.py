@@ -22,9 +22,11 @@ class test_dbStorage(unittest.TestCase):
                 )
         self.cur = self.db.cursor()
         self.console = HBNBCommand()
+        storage.reload()
 
     def tearDown(self):
         """ Cleans up test resources """
+        # Delete all objs in database
         self.cur.close()
         self.db.close()
         if os.path.exists('file.json'):
@@ -38,11 +40,27 @@ class test_dbStorage(unittest.TestCase):
 
     def test_all_without_class(self):
         """ Tests all method without class """
-        from models.city import City
-        tables = {'State': State, 'City': City}
-        query = "SELECT COUNT(*) FROM %s;"
+        tables = ['states', 'cities']
         obj_count = 0;
-        for table in tables.values():
-            result = self.cur.execute(query, (table,))
-            obj_count = obj_count + result.fetchone()[0]
+        for table in tables:
+            self.cur.execute('SELECT COUNT(*) FROM %s', (table,))
+            obj_count += self.cur.fetchone()[0]
         self.assertEqual(obj_count, len(storage.all()))
+
+    def test_new(self):
+        """ Tests the new method """
+        self.console.do_create('State name="Osun"')
+        state = max(storage.all(State).values(), key=lambda x: x.created_at)
+        storage.new(state)
+        self.assertIn(state, storage.all().values())
+
+    def test_save(self):
+        """ Tests the save method """
+        self.cur.execute('SELECT COUNT(*) FROM states')
+        initial_count = self.cur.fetchone()[0]
+        self.console.do_create('State name="Borno"')
+        state = max(storage.all(State).values(), key=lambda x: x.created_at)
+        state.save()  # save method is called internally from State class
+        self.cur.execute('SELECT COUNT(*) FROM states')
+        final_count = self.cur.fetchone()[0]
+        self.assertNotEqual(initial_count, final_count)
