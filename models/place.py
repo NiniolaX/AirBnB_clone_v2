@@ -1,44 +1,35 @@
 #!/usr/bin/python3
 """ Place Module for HBNB project """
 from models.base_model import BaseModel, Base
-#from models.review import Review
-#from sqlalchemy import Column, String, Integer, FLOAT, ForeignKey
-#from sqlalchemy.orm import relationship
+from sqlalchemy import Column, String, Integer, Float, ForeignKey
+from os import getenv
+# from sqlalchemy.orm import relationship
+# from models.review import Review
 
 
-class Place(BaseModel):
+class Place(BaseModel, Base):
     """ A place to stay """
-    #__tablename__ = "places"
-    city_id = '' #Column(String(60), ForeignKey("cities.id"))
-    user_id = '' #Column(String(60), ForeignKey("users.id"))
-    user = '' #relationship("User")
-    cities = '' #relationship("City")
-    name = '' #Column(String(128))
-    description = '' #Column(String(1024))
-    number_rooms = 0 #Column(Integer, default=0)
-    number_bathrooms = 0 #Column(Integer, default=0)
-    max_guest = 0 #Column(Integer, default=0)
-    price_by_night = 0 #Column(Integer, default=0)
-    latitude = 0.0 #Column(FLOAT)
-    longitude = 0.0 #Column(FLOAT)
-    amenity_ids = []
-    #reviews = relationship(
-        #"Review",
-        #backref="place",
-        #cascade="all, delete-orphan",
-    #)
+    if getenv("HBNB_TYPE_STORAGE") == 'db':
+        __tablename__ = "places"
+        city_id = Column(String(60), ForeignKey('cities.id'), nullable=False)
+        user_id = Column(String(60), ForeignKey('users.id'), nullable=False)
+        name = Column(String(128), nullable=False)
+        description = Column(String(1024), nullable=True)
+        number_rooms = Column(Integer, default=0, nullable=False)
+        number_bathrooms = Column(Integer, default=0, nullable=False)
+        max_guest = Column(Integer, default=0, nullable=False)
+        price_by_night = Column(Integer, default=0, nullable=False)
+        latitude = Column(Float, nullable=True)
+        longitude = Column(Float, nullable=True)
 
-    #@property
-    #def reviews(self):
-        #"""
-        #reviews _summary_
-
-        #Returns:
-            #_type_: _description_
-        #"""
-        #from models import storage
-        #return (
-            #review
-            #for review in storage.all(Review)
-            #if review.place_id == self.id
-        #)
+    else:
+        city_id = ""
+        user_id = ""
+        name = ""
+        description = ""
+        number_rooms = 0
+        number_bathrooms = 0
+        max_guest = 0
+        price_by_night = 0
+        latitude = 0.0
+        longitude = 0.0
