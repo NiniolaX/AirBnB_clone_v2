@@ -5,8 +5,8 @@ from models.base_model import BaseModel, Base
 #from sqlalchemy.orm import relationship
 
 
-class Review(BaseModel, Base):
-    """ Review class to store review information """
+class Review(BaseModel):
+    """ Review classto store review information """
     #__tablename__ = "reviews"
     place_id = '' #Column(String(60), ForeignKey("places.id"))
     user_id = '' #Column(String(60), ForeignKey("users.id"))
