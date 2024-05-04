@@ -11,7 +11,12 @@ from datetime import datetime
 
 @task
 def do_pack():
-    """ Generates a .tgz archive from a specified folder"""
+    """ Generates a .tgz archive from a specified folder
+    Args:
+        None
+    Return:
+        str: Archive name
+    """
     # Get current datetime
     timestamp = datetime.now().strftime('%Y%m%d%H%M%S')
 
@@ -28,5 +33,3 @@ def do_pack():
         return archive_name
     else:
         return None
-
-
