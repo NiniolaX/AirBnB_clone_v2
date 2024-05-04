@@ -8,11 +8,13 @@ from models.state import State
 from models.city import City
 from models.user import User
 from models.place import Place
+from models.review import Review
 classes = {
     'State': State,
     'City': City,
     'User': User,
-    'Place': Place
+    'Place': Place,
+    'Review': Review
 }
 
 
