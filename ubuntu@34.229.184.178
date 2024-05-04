@@ -2,7 +2,7 @@
 # Prepares web servers for deployment of static content (i.e. web_static)
 
 # Install Nginx if it is not already installed
-if ! sudo service nginx status &>/dev/null; then
+if ! sudo service nginx status; then
 	sudo apt -y update
 	sudo apt -y install nginx
 	sudo service nginx start
@@ -23,7 +23,7 @@ if [ ! -d "$webstatic_dir/releases/test" ]; then
 fi
 
 # Create a fake HTML file to be served
-sudo echo "<html>
+echo "<html>
   <head>
   </head>
   <body>
