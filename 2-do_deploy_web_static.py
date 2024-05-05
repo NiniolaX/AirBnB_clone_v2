@@ -40,8 +40,8 @@ def do_deploy(archive_path):
     run(f'tar -xzf {remote_archive_path} -C {path_to_decomp_archive}')
 
     # Move decompressed files one level up
-    #run(f'mv {path_to_decomp_archive}/web_static {path_to_decomp_archive}')
-    #run(f'rm -rf {path_to_decomp_archive}/web_static')
+    run(f'mv {path_to_decomp_archive}/web_static/* {path_to_decomp_archive}')
+    run(f'rm -rf {path_to_decomp_archive}/web_static')
 
     # Remove archive from web server
     run(f'sudo rm {remote_archive_path}')
