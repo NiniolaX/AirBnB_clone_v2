@@ -23,7 +23,7 @@ def do_deploy(archive_path):
     env.user = 'ubuntu'
     env.hosts = ['34.229.184.178', '54.83.138.88']
 
-    # Define relevant variables 
+    # Define relevant variables
     archive_name = archive_path.split('/')[-1].split('.')[0]
     destination_folder = "/data/web_static/releases"
     path_to_decomp_archive = f'{destination_folder}/{archive_name}/'
@@ -49,4 +49,4 @@ def do_deploy(archive_path):
     run('sudo service nginx restart')
 
     # Return True if all operations exit successfully
-    return True 
+    return True
