@@ -76,7 +76,7 @@ def do_deploy(archive_path):
     run(f'sudo rm {symlink_to_curr_release}')
 
     # Create new symbolic link to new version of code
-    run(f'sudo ln -s {path_to_decomp_archive} {symlink_to_curr_release}')
+    run(f'sudo ln -s {path_to_decomp_archive}/ {symlink_to_curr_release}')
 
     # Restart nginx
     run('sudo service nginx restart')
