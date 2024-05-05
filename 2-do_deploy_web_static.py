@@ -56,4 +56,5 @@ def do_deploy(archive_path):
     run('sudo service nginx restart')
 
     # Return True if all operations exit successfully
+    print('New version deployed!')
     return True
