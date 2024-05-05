@@ -30,18 +30,20 @@ def do_deploy(archive_path):
 
     # Define relevant variables
     archive_name = remote_archive_path.split('/')[-1].split('.')[0]
-    destination_folder = "/data/web_static/releases"
-    path_to_decomp_archive = f'{destination_folder}/{archive_name}'
+    dest_folder = "/data/web_static/releases"
+    path_to_decomp_archive = f'{dest_folder}/{archive_name}'
     symlink_to_curr_release = "/data/web_static/current"
 
     # Uncompress archive to destination folder on web server
-    run(f'sudo mkdir -p {path_to_decomp_archive}')
-    run(f'sudo chown -R ubuntu:ubuntu {path_to_decomp_archive}')
-    run(f'tar -xzf {remote_archive_path} -C {path_to_decomp_archive}')
+    # run(f'sudo mkdir -p {path_to_decomp_archive}')
+    # run(f'sudo chown -R ubuntu:ubuntu {path_to_decomp_archive}')
+    run(f'tar -xzf {remote_archive_path} -C {dest_folder}')
 
-    # Move decompressed files one level up
-    run(f'mv {path_to_decomp_archive}/web_static/* {path_to_decomp_archive}')
-    run(f'rm -rf {path_to_decomp_archive}/web_static')
+    # Move decompressed files (in path_to_decomp_archive/web_static) a level up
+
+    # Rename decompressed folder with respect to version name
+    run(f'mv {dest_folder}/web_static {path_to_decomp_archive}')
+    # run(f'rm -rf {path_to_decomp_archive}/web_static')
 
     # Remove archive from web server
     run(f'sudo rm {remote_archive_path}')
@@ -55,6 +57,6 @@ def do_deploy(archive_path):
     # Restart nginx
     run('sudo service nginx restart')
 
-    # Return True if all operations exit successfully
+    # Return True if all operations exited successfully
     print('New version deployed!')
     return True
