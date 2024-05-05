@@ -14,6 +14,7 @@ def do_pack():
     Return:
         (str): Archive name if success, else None
     """
+    print('Packing new version...')
     # Specify source and destination folders
     src = "web_static"
     dest = "versions"
@@ -30,6 +31,7 @@ def do_pack():
     # Run command
     result = local(f'tar -czvf {path_to_archive} {src}')
     if result.succeeded:
+        print(f'web_static packed: {path_to_archive}')
         return path_to_archive
     else:
         return None

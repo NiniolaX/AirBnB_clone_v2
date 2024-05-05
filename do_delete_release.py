@@ -1,7 +1,6 @@
 #!/usr/bin/python3
 """
-This module contains a Fabric function that deletes a release or deployment
-to a server.
+This module contains a Fabric function that deletes a release from a server.
 """
 
 from fabric.api import run, env
@@ -12,7 +11,7 @@ env.key_filename = '~/.ssh/servers'
 
 
 def delete_release(path_to_release):
-    """ Deletes a release/deployment to a server.
+    """ Deletes a release from a server.
     Args:
         path_to_release: Full path to folder containing release codebase
     Return:

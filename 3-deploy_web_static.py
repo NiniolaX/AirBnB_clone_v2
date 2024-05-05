@@ -1,16 +1,44 @@
 #!/usr/bin/python3
 """
-This module contains a Fabric function that distributes an archive to my
-web servers.
-Archive is web_static archive created with 1-pack_web_static.py script
+This module contains a function that creates and distributes an archive to web
+servers.
 """
-from fabric.api import run, env, put, sudo
+from fabric.api import *
+from datetime import datetime
 import os
 
 # Specify host information
 env.user = 'ubuntu'
 env.hosts = ['34.229.184.178', '54.83.138.88']
 env.key_filename = '~/.ssh/servers'
+
+
+def do_pack():
+    """ Generates a .tgz archive from a specified folder
+    Args:
+        None
+    Return:
+        (str): Archive name if success, else None
+    """
+    # Specify source and destination folders
+    src = "web_static"
+    dest = "versions"
+
+    # Get current datetime
+    timestamp = datetime.now().strftime('%Y%m%d%H%M%S')
+
+    # Specify path to archive
+    path_to_archive = f"{dest}/{src}_{timestamp}.tgz"
+
+    # Create destination folder if it doesn't exist
+    local(f'if [ ! -d {dest} ]; then mkdir {dest}; fi')
+
+    # Run command
+    result = local(f'tar -czvf {path_to_archive} {src}')
+    if result.succeeded:
+        return path_to_archive
+    else:
+        return None
 
 
 def do_deploy(archive_path):
@@ -24,8 +52,6 @@ def do_deploy(archive_path):
     if not os.path.exists(archive_path):
         print(f'Path {archive_path} does not exist')
         return False
-
-    print('Deploying new version...')
 
     # Upload the archive to /tmp/ directory of web servers
     remote_archive_path = put(archive_path, '/tmp/')[0]
@@ -58,3 +84,30 @@ def do_deploy(archive_path):
     # Return True if all operations exited successfully
     print('New version deployed!')
     return True
+
+
+def deploy():
+    """Creates and distributes an archive to web servers
+    Args:
+        None
+    Return:
+        (bool): True on success, otherwise, fail
+    """
+    # Pack web_static
+    try:
+        archive_path = do_pack()
+    except Exception as e:
+        print(str(e))
+        return False
+
+    # Return False if no archive was created
+    if archive_path is None:
+        return False
+
+    # Deploy archive
+    deployment_status = do_deploy(archive_path)
+    return deployment_status
+
+
+if __name__ == '__main__':
+    deploy()
