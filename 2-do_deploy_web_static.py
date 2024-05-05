@@ -36,6 +36,9 @@ def do_deploy(archive_path):
     path_to_decomp_archive = f'{dest_folder}/{archive_name}'
     symlink_to_curr_release = "/data/web_static/current"
 
+    # Create dest_folder if it doesn't exist
+    run(f'if [ -d {dest_folder} ]; then mkdir -p {dest_folder}; fi')
+
     # Uncompress archive to destination folder on web server
     run(f'tar -xzf {remote_archive_path} -C {dest_folder}')
 
