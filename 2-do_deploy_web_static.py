@@ -31,7 +31,7 @@ def do_deploy(archive_path):
     symlink_to_curr_release = "/data/web_static/current"
 
     # Upload the archive to /tmp directory of web servers
-    put(f'{archive_path}, /tmp/')
+    put(archive_path, '/tmp/')
 
     # Uncompress archive to destination folder on web server
     run(f'sudo mkdir -p {path_to_decomp_archive}')
