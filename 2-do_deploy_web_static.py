@@ -9,7 +9,7 @@ import os
 
 # Specify host information
 env.user = 'ubuntu'
-env.hosts = ['34.229.184.178']
+env.hosts = ['34.229.184.178', '54.83.138.88']
 env.key_filename = '~/.ssh/servers'
 
 
