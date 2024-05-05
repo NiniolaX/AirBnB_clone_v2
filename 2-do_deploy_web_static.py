@@ -7,6 +7,11 @@ Archive is web_static archive created with 1-pack_web_static.py script
 from fabric.api import run, env, put
 import os
 
+# Specify host information
+env.user = 'ubuntu'
+env.hosts = ['34.229.184.178', '54.83.138.88']
+env.key_filename = '~/.ssh/servers'
+
 
 def do_deploy(archive_path):
     """ Distributes an archive to some web servers
@@ -18,10 +23,6 @@ def do_deploy(archive_path):
     if not os.path.exists(archive_path):
         # If file at path archive_path does not exist, return False
         return False
-
-    # Define host information
-    env.user = 'ubuntu'
-    env.hosts = ['34.229.184.178', '54.83.138.88']
 
     # Define relevant variables
     archive_name = archive_path.split('/')[-1].split('.')[0]
