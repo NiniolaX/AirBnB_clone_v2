@@ -9,7 +9,7 @@ import os
 
 
 def do_deploy(archive_path):
-    """Distributes an archive to some web servers
+    """ Distributes an archive to some web servers
     Args:
         archive_path: Path to archive to be distributed on servers
     Return:
