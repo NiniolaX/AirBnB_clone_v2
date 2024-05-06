@@ -49,6 +49,17 @@ def do_deploy(archive_path):
         run(f'sudo rm -rf {release_symlink}')
         run(f'sudo ln -s {uncomp_folder_path}/ {release_symlink}')
 
+        # Update Nginx configuration to serve new release to hbnb_static
+        config_file = "/etc/nginx/sites-available/default"
+        hbnb_block = f'''
+            location /hbnb_static {{
+                alias {release_symlink}/;
+                index index.html;
+            }}
+        '''
+        cmd = 'sudo sed -i "/^   location \\/ {{$/i\\{hbnb_block}" {config_file}'
+        run(cmd)
+
         # Restart server
         run('sudo service nginx restart')
 
