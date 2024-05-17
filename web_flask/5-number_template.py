@@ -3,8 +3,8 @@
 Routes:
     /: display “Hello HBNB!”
     /hbnb: display “HBNB”
-    /c/<text>: display “C ” followed by the value of the text variable
-    /python/<text>: display “Python ”, followed by the value of the text
+    /c/<text>: display “C ” followed by the value of the 'text' variable
+    /python/<text>: display “Python ”, followed by the value of the 'text'
         variable
     /number/<n>: displays "n is a number" only if n is an integer
     /number_template/<n>: display a HTML page only if n is an integer
@@ -30,7 +30,7 @@ def hbnb():
 
 @app.route('/c/<text>', strict_slashes=False)
 def c(text):
-    """ Returns a string 'C' followed by the value of the text variable
+    """ Returns a string 'C' followed by the value of the 'text' variable
     Args:
         text(str) -String to be displayed with 'C'
     """

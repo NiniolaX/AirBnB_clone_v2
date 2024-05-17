@@ -3,8 +3,8 @@
 Routes:
     /: display “Hello HBNB!”
     /hbnb: display “HBNB”
-    /c/<text>: display “C ” followed by the value of the text variable
-    /python/<text>: display “Python ”, followed by the value of the text
+    /c/<text>: display “C ” followed by the value of the 'text' variable
+    /python/<text>: display “Python ”, followed by the value of the 'text'
     variable
 """
 from flask import Flask
@@ -14,20 +14,20 @@ app = Flask(__name__)
 
 
 @app.route('/', strict_slashes=False)
-def hello_route():
+def hello():
     """ Returns "Hello HBNB!" """
     return "Hello HBNB!"
 
 
 @app.route('/hbnb', strict_slashes=False)
-def hbnb_route():
+def hbnb():
     """ Returns "HBNB" """
     return "HBNB"
 
 
 @app.route('/c/<text>', strict_slashes=False)
-def c_route(text):
-    """ Returns a string 'C' followed by the value of the text variable
+def c(text):
+    """ Returns a string 'C' followed by the value of the 'text' variable
     Args:
         text(str) -String to be displayed with 'C'
     """
@@ -36,7 +36,7 @@ def c_route(text):
 
 @app.route('/python/', strict_slashes=False)
 @app.route('/python/<text>', strict_slashes=False)
-def python_route(text="is cool"):
+def python(text="is cool"):
     """ Returns a string 'Python' followed by the value of text
     Args:
         text(str) - String to be displayed with 'Python', default is 'is cool'
