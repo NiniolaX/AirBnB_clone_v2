@@ -35,7 +35,7 @@ class test_state(test_basemodel):
         from models.city import City
         state = self.value(name='Texas')
         state.save()
-        city = City(name='San_Jose', state_id= state.id)
+        city = City(name='San_Jose', state_id=state.id)
         city.save()
         self.assertIn(city, state.cities)
 
@@ -47,6 +47,7 @@ class test_state_with_dbsStorage(unittest.TestCase):
     def setUp(self):
         """ Sets up resources for testing """
         self.console = HBNBCommand()
+
     def tearDown(self):
         """ Cleans up test resources and environment """
         from models.base_model import Base

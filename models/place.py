@@ -41,7 +41,7 @@ class Place(BaseModel, Base):
         def reviews(self):
             """
             Getter method for reviews associated with current place.
-            Return: 
+            Return:
                 List of Review instances with place_id equal to current
                 place_id
             """
@@ -52,4 +52,3 @@ class Place(BaseModel, Base):
                 if obj.place_id == self.id:
                     review_instances.append(obj)
             return review_instances
-

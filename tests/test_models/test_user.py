@@ -7,6 +7,7 @@ from os import getenv
 from console import HBNBCommand
 from models import storage
 
+
 @unittest.skipIf(getenv('HBNB_TYPE_STORAGE') == 'db',
                  'Test class not relevant to db storage')
 class test_User(test_basemodel):
@@ -38,13 +39,15 @@ class test_User(test_basemodel):
         new = self.value()
         self.assertEqual(type(new.password), str)
 
+
 @unittest.skipIf(getenv('HBNB_TYPE_STORAGE') != 'db',
-                         'Test class not relevant to db storage')
+                 'Test class not relevant to db storage')
 class test_User_with_db_storage(unittest.TestCase):
     """ Tests the User class with database storage engine """
     def setUp(self):
         """ Sets up resources for testing """
         self.console = HBNBCommand()
+
     def tearDown(self):
         """ Cleans up test resources and environment """
         from models.base_model import Base

@@ -41,7 +41,7 @@ class DBStorage:
             Base.metadata.drop_all(bind=self.__engine)
 
     def all(self, cls=None):
-        """ Query current database section
+        """ Query current database session
 
         Args:
             cls(str): Name of class whose table is to be queried (optional)

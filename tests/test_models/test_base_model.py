@@ -27,7 +27,7 @@ class test_basemodel(unittest.TestCase):
         """ Cleans up test resources """
         try:
             os.remove('file.json')
-        except:
+        except Exception as e:
             pass
 
     def test_default(self):
