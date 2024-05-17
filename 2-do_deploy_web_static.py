@@ -26,8 +26,8 @@ def do_deploy(archive_path):
 
         # Extract necessary paths
         archive_name = os.path.basename(archive_path)
-        tmp_folder = '/tmp/'
-        dest_folder = '/data/web_static/releases/'
+        tmp_folder = '/tmp'
+        dest_folder = '/data/web_static/releases'
         release_symlink = '/data/web_static/current'
         uncomp_folder_path = f'{dest_folder}/{archive_name}'.split('.')[0]
 
@@ -48,6 +48,18 @@ def do_deploy(archive_path):
         # Update symbolic link to current release
         run(f'sudo rm -rf {release_symlink}')
         run(f'sudo ln -s {uncomp_folder_path}/ {release_symlink}')
+
+        # Update Nginx configuration to serve new release to hbnb_static
+#        config = "/etc/nginx/sites-available/default"
+#        hbnb_block = """
+#            location /hbnb_static {
+#                alias /data/web_static/current/;
+#                index index.html;
+#            }
+#        """
+#        cmd = f"sudo sed -i '/^   location \/ {{$/i\ {hbnb_block}' {config}"
+#        run(f'if ! sudo cat {config}
+#        | grep -q {release_symlink}/; then {cmd}; fi')
 
         # Restart server
         run('sudo service nginx restart')
