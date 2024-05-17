@@ -21,16 +21,13 @@ class test_dbStorage(unittest.TestCase):
                                      database=os.getenv('HBNB_MYSQL_DB')
                 )
         self.cur = self.db.cursor()
-        self.console = HBNBCommand()
         storage.reload()
+        self.console = HBNBCommand()
 
     def tearDown(self):
         """ Cleans up test resources """
-        # Delete all objs in database
         self.cur.close()
         self.db.close()
-        if os.path.exists('file.json'):
-            os.remove('file.json')
 
     def test_all_with_class(self):
         """ Tests all method with class """
@@ -53,14 +50,17 @@ class test_dbStorage(unittest.TestCase):
         state = max(storage.all(State).values(), key=lambda x: x.created_at)
         storage.new(state)
         self.assertIn(state, storage.all().values())
+        state.delete()
 
     def test_save(self):
         """ Tests the save method """
         self.cur.execute('SELECT COUNT(*) FROM states')
         initial_count = self.cur.fetchone()[0]
-        self.console.do_create('State name="Borno"')
+        self.console.do_create('State name="Abuja"')
         state = max(storage.all(State).values(), key=lambda x: x.created_at)
-        state.save()  # save method is called internally from State class
+        self.assertIn(state, storage.all().values())
+        storage.close()  # SQL alchemy didn't reload his 'Session' so close
         self.cur.execute('SELECT COUNT(*) FROM states')
         final_count = self.cur.fetchone()[0]
         self.assertNotEqual(initial_count, final_count)
+        state.delete()

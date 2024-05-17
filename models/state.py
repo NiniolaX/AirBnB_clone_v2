@@ -12,8 +12,9 @@ class State(BaseModel, Base):
         __tablename__ = 'states'
         name = Column(String(128), nullable=False)
         from models.city import City
-        cities = relationship('City', backref='state',
-                              cascade='all, delete, delete-orphan')
+        cities = relationship('City',
+                              cascade='all, delete, delete-orphan',
+                              backref='state')
     else:
         name = ""
 

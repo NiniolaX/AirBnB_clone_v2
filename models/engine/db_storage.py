@@ -87,3 +87,7 @@ class DBStorage:
                                        expire_on_commit=False)
         Base.metadata.create_all(self.__engine)
         self.__session = scoped_session(session_factory)
+
+    def close(self):
+        """ Removes current session """
+        self.__session.remove()
