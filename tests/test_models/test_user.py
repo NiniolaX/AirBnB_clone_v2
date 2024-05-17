@@ -79,12 +79,14 @@ class test_User_with_db_storage(unittest.TestCase):
 
     def test_user_creation_with_email_and_passwd(self):
         """ Tests user creation with email and password only """
-        with self.assertRaises(Exception):
-            self.console.do_create('User email="nini@gmail.com" password="123"')
+        initial_user_count = len(storage.all(User))
+        self.console.do_create('User email="user01@gmail.com" password="123"')
+        final_user_count = len(storage.all(User))
+        self.assertEqual(initial_user_count, final_user_count - 1)
 
     def test_user_creation_with_all_arguments(self):
         """ Tests user creation with all required arguments """
         initial_user_count = len(storage.all(User))
-        self.console.do_create('User email="user01@gmail.com" password="123" first_name="Nini" last_name="Afinni"')
+        self.console.do_create('User email="love@gmail.com" password="123" first_name="Nini" last_name="Afinni"')
         final_user_count = len(storage.all(User))
         self.assertEqual(initial_user_count, final_user_count - 1)

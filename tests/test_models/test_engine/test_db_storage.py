@@ -43,7 +43,7 @@ class test_dbStorage(unittest.TestCase):
         tables = ['states', 'cities']
         obj_count = 0;
         for table in tables:
-            self.cur.execute('SELECT COUNT(*) FROM %s', (table,))
+            self.cur.execute(f'SELECT COUNT(*) FROM {table}')
             obj_count += self.cur.fetchone()[0]
         self.assertEqual(obj_count, len(storage.all()))
 
