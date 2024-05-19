@@ -5,19 +5,10 @@ Routes:
                  present in `DBStorage` sorted by name (A-Z)
 """
 from flask import Flask, render_template
-from os import getenv
+from models import storage
 
-
-if getenv('HBNB_TYPE_STORAGE') == 'db':
-    from models import storage
 
 app = Flask(__name__)
-
-
-@app.teardown_appcontext
-def teardown_db(exception):
-    """ Close the database session after each request. """
-    storage.close()
 
 
 @app.route('/states_list', strict_slashes=False)
@@ -27,6 +18,12 @@ def states_list():
     storage.reload()
     states = list(storage.all(State).values())
     return render_template('7-states_list.html', states=states)
+
+
+@app.teardown_appcontext
+def teardown_db(exception):
+    """ Close the database session after each request. """
+    storage.close()
 
 
 if __name__ == '__main__':
