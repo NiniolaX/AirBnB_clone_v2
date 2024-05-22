@@ -27,7 +27,7 @@ class test_fileStorage(unittest.TestCase):
         """ Remove storage file at end of tests """
         try:
             os.remove('file.json')
-        except:
+        except Exception as e:
             pass
 
     def test_obj_list_empty(self):
@@ -61,7 +61,7 @@ class test_fileStorage(unittest.TestCase):
         new = BaseModel()
         new.save()
         self.assertIn(f"{new.__class__.__name__}.{new.id}", storage.all())
-        #self.assertFalse(os.path.exists('file.json'))
+        # self.assertFalse(os.path.exists('file.json'))
 
     def test_empty(self):
         """ Data is saved to file """

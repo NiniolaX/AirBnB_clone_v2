@@ -15,11 +15,11 @@ class test_dbStorage(unittest.TestCase):
     def setUp(self):
         """ Set up test resources """
         self.db = MySQLdb.connect(host=os.getenv('HBNB_MYSQL_HOST'),
-                                     port=3306,
-                                     user=os.getenv('HBNB_MYSQL_USER'),
-                                     passwd=os.getenv('HBNB_MYSQL_PWD'),
-                                     database=os.getenv('HBNB_MYSQL_DB')
-                )
+                                  port=3306,
+                                  user=os.getenv('HBNB_MYSQL_USER'),
+                                  passwd=os.getenv('HBNB_MYSQL_PWD'),
+                                  database=os.getenv('HBNB_MYSQL_DB')
+                                  )
         self.cur = self.db.cursor()
         storage.reload()
         self.console = HBNBCommand()
@@ -38,7 +38,7 @@ class test_dbStorage(unittest.TestCase):
     def test_all_without_class(self):
         """ Tests all method without class """
         tables = ['states', 'cities']
-        obj_count = 0;
+        obj_count = 0
         for table in tables:
             self.cur.execute(f'SELECT COUNT(*) FROM {table}')
             obj_count += self.cur.fetchone()[0]
