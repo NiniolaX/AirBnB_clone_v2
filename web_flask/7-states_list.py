@@ -12,20 +12,16 @@ from models.state import State
 app = Flask(__name__)
 
 
-# Configure Jinja2 environment
-# app.jinja_env.trim_blocks = True
-# app.jinja_env.lstrip_blocks = True
-
-
 @app.route('/states_list', strict_slashes=False)
 def states_list():
     """ Returns a template displaying all states """
-    states = sorted(storage.all(State).values(), key=lambda x: x.name)
-    return render_template('7-states_list.html', states=states)
+    states = storage.all(State).values()
+    sorted_states = sorted(states, key=lambda x: x.name)
+    return render_template('7-states_list.html', states=sorted_states)
 
 
 @app.teardown_appcontext
-def teardown_db(error):
+def teardown_db(exception):
     """ Close the database session after each request. """
     storage.close()
 
