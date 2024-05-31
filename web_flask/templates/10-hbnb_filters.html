@@ -25,8 +25,8 @@
                         <LI>
                             <H2><B>{{ state.name|e }}</B></H2>
                             <UL>
-                                {% if state.id in cities_dict %}
-                                    {% for city in cities_dict[state.id] %}
+                                {% if state.id in cities_by_state %}
+                                    {% for city in cities_by_state[state.id] %}
 				    <LI><H4><B>{{ city.name|e }}</B></H4></LI>
                                     {% endfor %}
                                 {% endif %}

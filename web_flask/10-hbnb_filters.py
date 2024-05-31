@@ -15,23 +15,24 @@ app = Flask(__name__)
 
 @app.route('/hbnb_filters', strict_slashes=False)
 def load_hbnb_filters():
-    """ Displays a simple clone of the AirBnB webpage 
+    """ Returns a dynamic clone of the AirBnB web app
     """
     # Get states
     states = storage.all(State).values()
     sorted_states = sorted(states, key=lambda x: x.name)
-
     # Extract cities by state into a dictionary
-    cities_dict = {}
+    cities_by_state = {}
     for state in states:
         sorted_cities = sorted(state.cities, key=lambda x: x.name)
-        cities_dict[state.id] = sorted_cities
-
+        cities_by_state[state.id] = sorted_cities
     # Extract amenities
     amenities = storage.all(Amenity).values()
-
-    return render_template('10-hbnb_filters.html', states=sorted_states,
-                           cities_dict=cities_dict, amenities=amenities)
+    sorted_amenities = sorted(amenities, key=lambda x: x.name)
+    # Render template
+    return render_template('10-hbnb_filters.html',
+                           states=sorted_states,
+                           cities_by_state=cities_by_state,
+                           amenities=sorted_amenities)
 
 
 @app.teardown_appcontext
