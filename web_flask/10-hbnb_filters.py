@@ -7,23 +7,31 @@ Routes:
 from flask import Flask, render_template
 from models import storage
 from models.state import State
+from models.amenity import Amenity
 
 
 app = Flask(__name__)
 
 
-# Configure Jinja2 environment
-# app.jinja_env.trim_blocks = True
-# app.jinja_env.lstrip_blocks = True
-
-
 @app.route('/hbnb_filters', strict_slashes=False)
-def states(id):
-    """ Displays an HTML page like web_static/6-index.html
+def load_hbnb_filters():
+    """ Displays a simple clone of the AirBnB webpage 
     """
-    states = storage.all(State)
+    # Get states
+    states = storage.all(State).values()
     sorted_states = sorted(states, key=lambda x: x.name)
-    return render_template('9-states.html', states=sorted_states)
+
+    # Extract cities by state into a dictionary
+    cities_dict = {}
+    for state in states:
+        sorted_cities = sorted(state.cities, key=lambda x: x.name)
+        cities_dict[state.id] = sorted_cities
+
+    # Extract amenities
+    amenities = storage.all(Amenity).values()
+
+    return render_template('10-hbnb_filters.html', states=sorted_states,
+                           cities_dict=cities_dict, amenities=amenities)
 
 
 @app.teardown_appcontext
@@ -33,4 +41,4 @@ def teardown_db(exception):
 
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5000, debug=True)
+    app.run(host='0.0.0.0', port=5000)
