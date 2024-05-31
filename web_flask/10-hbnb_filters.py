@@ -18,7 +18,12 @@ app = Flask(__name__)
 
 
 @app.route('/hbnb_filters', strict_slashes=False)
-def 
+def states(id):
+    """ Displays an HTML page like web_static/6-index.html
+    """
+    states = storage.all(State)
+    sorted_states = sorted(states, key=lambda x: x.name)
+    return render_template('9-states.html', states=sorted_states)
 
 
 @app.teardown_appcontext
